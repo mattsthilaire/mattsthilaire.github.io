@@ -1,32 +1,106 @@
-## Blog Post Title From First Header
-
-Due to a plugin called `jekyll-titles-from-headings` which is supported by GitHub Pages by default. The above header (in the markdown file) will be automatically used as the pages title.
-
-If the file does not start with a header, then the post title will be derived from the filename.
-
-This is a sample blog post. You can talk about all sorts of fun things here.
-
----
-
-### This is a header
-
-#### Some T-SQL Code
-
-```tsql
-SELECT This, [Is], A, Code, Block -- Using SSMS style syntax highlighting
-    , REVERSE('abc')
-FROM dbo.SomeTable s
-    CROSS JOIN dbo.OtherTable o;
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns; sns.set()
 ```
 
-#### Some PowerShell Code
 
-```powershell
-Write-Host "This is a powershell Code block";
+```python
+def relu(arr):
+    return ( (arr > 0) * arr)
+```
 
-# There are many other languages you can use, but the style has to be loaded first
 
-ForEach ($thing in $things) {
-    Write-Output "It highlights it using the GitHub style"
-}
+```python
+xs = np.linspace(-10, 10, 10_000)
+plt.plot(xs, relu(xs))
+```
+
+
+
+
+    [<matplotlib.lines.Line2D at 0x7fc49bb4d4f0>]
+
+
+
+
+    
+![png](output_2_1.png)
+    
+
+
+
+```python
+def dev_relu(arr):
+    return (arr > 0) * np.ones(arr.shape)
+```
+
+
+```python
+plt.plot(xs, dev_relu(xs))
+```
+
+
+
+
+    [<matplotlib.lines.Line2D at 0x7fc458142400>]
+
+
+
+
+    
+![png](output_4_1.png)
+    
+
+
+### One Layer
+
+
+```python
+def func(x, y):
+    x_noise = x + np.random.normal(loc=0, scale=1)
+    y_noise = y + np.random.normal(loc=0, scale=1)
+    return x_noise**2 + y_noise
+```
+
+
+```python
+np.meshgrid(np.linspace(-10, 10, 10_000), np.linspace(-10, 10, 10_000))
+```
+
+
+
+
+    [array([[-10.       ,  -9.9979998,  -9.9959996, ...,   9.9959996,
+               9.9979998,  10.       ],
+            [-10.       ,  -9.9979998,  -9.9959996, ...,   9.9959996,
+               9.9979998,  10.       ],
+            [-10.       ,  -9.9979998,  -9.9959996, ...,   9.9959996,
+               9.9979998,  10.       ],
+            ...,
+            [-10.       ,  -9.9979998,  -9.9959996, ...,   9.9959996,
+               9.9979998,  10.       ],
+            [-10.       ,  -9.9979998,  -9.9959996, ...,   9.9959996,
+               9.9979998,  10.       ],
+            [-10.       ,  -9.9979998,  -9.9959996, ...,   9.9959996,
+               9.9979998,  10.       ]]),
+     array([[-10.       , -10.       , -10.       , ..., -10.       ,
+             -10.       , -10.       ],
+            [ -9.9979998,  -9.9979998,  -9.9979998, ...,  -9.9979998,
+              -9.9979998,  -9.9979998],
+            [ -9.9959996,  -9.9959996,  -9.9959996, ...,  -9.9959996,
+              -9.9959996,  -9.9959996],
+            ...,
+            [  9.9959996,   9.9959996,   9.9959996, ...,   9.9959996,
+               9.9959996,   9.9959996],
+            [  9.9979998,   9.9979998,   9.9979998, ...,   9.9979998,
+               9.9979998,   9.9979998],
+            [ 10.       ,  10.       ,  10.       , ...,  10.       ,
+              10.       ,  10.       ]])]
+
+
+
+
+```python
+
 ```
