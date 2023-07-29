@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "website"
+  title: "Bombastic Mediocracy"
   navbar:
     right:
       - about.qmd
