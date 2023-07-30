@@ -1,0 +1,1126 @@
+---
+title: Better OOP Learning Through Chemistry
+execute: 
+  error: true
+author: Matt St. Hilaire
+date: 07/30/2023
+format:
+  html:
+    code-fold: false
+jupyter: python3
+---
+
+There are literally <a href="https://realpython.com/python3-object-oriented-programming"/>100's</a> upon <a href="https://www.youtube.com/watch?v=Ej_02ICOIgs"/>100's</a>  upon <a href="https://kinsta.com/blog/python-object-oriented-programming/"/>100's</a> of Object Orientation Programming blog Posts, tutorials, or wiki pages. So why add more? Well...really there's no strictly legitimate reason. Those other ones are great. However, I had this idea and wanted to see how well I knew OOP and if someone out there vibes on my wavelength, maybe this will make more sense than those other ones.
+
+So, what the use case? A bit of chemistry. I have a physics background myself, however, most people that probably navigated here took at least a course or two of chem in high school and or college, having remember reactions, atomic numbers, and orbitals.
+
+We'll flesh out our OOP skills and take a look at some stuff in python by making an OOP framework for chemistry i.e. atoms, protons, electrons, neutrons, elements, etcs.
+
+Please be warned, I'm not a chemist and any feedback on accuracy will be more than welcomed.
+
+So with that, let's dive in.
+
+## In the Beginning....
+
+In order to build up our chem universe, we're going to need some elementry particles. We could get fancy and do <a href="https://en.wikipedia.org/wiki/Quark">quarks</a> for <a href="https://en.wikipedia.org/wiki/Proton">protons</a> and <a href="https://en.wikipedia.org/wiki/Neutron">neutrons</a>, but let's keep it simple with <a href="https://en.wikipedia.org/wiki/Electron">electrons</a>, protons, and neutrons as our building blocks.
+
+For those, we're starting off building a <a href="https://en.wikipedia.org/wiki/Class_(computer_programming)">class</a> in python to represent these:
+
+```{python}
+# | id: LtkRczlj9mTf
+class Electron:
+    charge = -1
+    mass = 9.10938356e-31
+
+
+class Proton:
+    charge = 1
+    mass = 1.67262158e-27
+
+
+class Neutron:
+    charge = 0
+    mass = 1.67492721e-27
+```
+
+This is almost as simple as classes get in python. A class is an object that can store values and do stuff. More on the doing stuff later. Here, our classes are only storing stuff i.e. charge and mass as integers and floating point numbers, repsepctively. They can literally store anything we want: lists, dicts, strings, other classes. We could have added components to proton to simulate quarks (in violation of what I set as a preliminary earlier) and definted it as this:
+
+```{python}
+# | id: jGaGssOuAHzj
+
+
+class ProtonWithQuarks:
+    charge = 1
+    mass = 1.67262158e-27
+    components = ["upquark", "upquark", "downquark"]
+
+
+```
+
+We could have even defined a quark class and put a quark in a list for our ProtonWithQuark class. Classes can have any <a href="https://en.wikipedia.org/wiki/Attribute_(computing)">attribute</a> we want them to have. Our restrictions are only our imagination and available memory.
+
+Attributes are data that a class holds. In our case for our elementary particle classes, we have charge and mass. We could have other things like mentioned above, but these two suit our needs for now. To access these attributes, we first have to define instances of our particle classes like so:
+
+```{python}
+# | id: cr9Jdt28AQMm
+electron = Electron()
+proton = Proton()
+neutron = Neutron()
+```
+
+After creataing these variables, we can now use them to access our data in the class. Each time we call a class like this where we call the class name followed by (), we're creating a new instance of that class. In our case, we're creating a new instance and then assigning that instance to a variable that we can do stuff to.
+
+To start doing stuff, let's grab some attributes from our class using the . operator. That's just your normal everyday period, or as the British call it, <a href="https://en.wikipedia.org/wiki/Full_stop">full stop</a> symbol. To do so, we hit up our variable followed by a . and then the attribute we want to access.
+
+```{python}
+# | id: fOIGxsq-A-A8
+# | outputId: 4fe36d3c-8381-4149-a381-89a2ff7d8976
+electron.charge, electron.mass
+```
+
+Nice. By using the . on our instance of electron, we can get the charge and mass: things we defined in the electron definition. We could do this through the proton and neutron instances as well:
+
+```{python}
+# | id: EY8FOdvpBdsu
+# | outputId: d573d48c-0c73-4972-e05f-ac8213680af6
+print(proton.charge, proton.mass)
+print(neutron.charge, neutron.mass)
+```
+
+These values get treated like any other in python i.e. if you grab the mass of an instance of an electron, you can add, multiple, divide, etc. That mass value is simply a float value stored in an Electron data type:
+
+```{python}
+# | id: bTRPHUt3B5Df
+# | outputId: 7a52068b-6461-4b2f-e2d0-95da1364e2b1
+# mass of 3 electrons
+electron.mass * 3
+```
+
+But what happens if scientists discover a slight change in charge or mass of an electron. Or more realistically, what if you wanted to use different units. <a href="https://en.wikipedia.org/wiki/Coulomb">Coulomb</a> instead of the <a href="https://en.wikipedia.org/wiki/Elementary_charge">elementary charge</a>? Well, you might want to make your class more flexible by making your attributes more flexible when you call an instance of a class. That's were the `__init__` function comes in:
+
+```{python}
+# | id: oTBdSWUiKyAl
+
+
+class Electron:
+
+    def __init__(self, charge=-1, mass=9.10938356e-31):
+        self.charge = charge
+        self.mass = mass
+
+
+class Proton:
+
+    def __init__(self, charge=1, mass=1.67262158e-27):
+        self.charge = charge
+        self.mass = mass
+
+
+class Neutron:
+
+    def __init__(self, charge=0, mass=1.67492721e-27):
+        self.charge = charge
+        self.mass = mass
+
+
+```
+
+These definitions make things more flexible. Using the `__init__` in our class definitions means we can pass arguments to our class instances:
+
+```{python}
+# | id: f2d89UFdL1GB
+# | outputId: 29176cf5-7f60-4831-eac9-cceb93c9b37d
+electron = Electron(charge=2, mass=1)
+proton = Proton(charge=2, mass=20)
+neutron = Neutron(charge=0, mass=5)
+
+print(electron.charge, proton.mass, neutron.charge)
+
+# passing no args uses our default args specified in our class definition
+electron = Electron()
+print(electron.charge, electron.mass)
+```
+
+This make our code more flexible and allow us to change values as needed. This also is our first view of a <a href="https://www.geeksforgeeks.org/dunder-magic-methods-python/">dunder method</a>. Whenever you see a funtion in a class with __ surrounding it on each side (ex. `__myFunc__()`) then you know it's a dunder method.
+
+We'll add more of these later, but these are special functions that allow our class to do things.
+
+But before we get ahead of ourselves, let's talk about methods. The other important part of classes.
+
+## The Method
+
+A method is function that resides in a class. It can literally do anything and doesn't even have to be about that class. For example, we can add a function into our Electron class that just prints the word "banana":
+
+```{python}
+# | id: KuHGIDhvLqDB
+# | outputId: aa971667-7fe4-4683-d7c3-6c85edf457c9
+
+
+class Electron:
+
+    def __init__(self, charge=-1, mass=9.10938356e-31):
+        self.charge = charge
+        self.mass = mass
+
+    def print_banana(self):
+        print("banana")
+
+
+electron = Electron()
+electron.print_banana()
+```
+
+We simply made an instance of our electron class, use our . operator like before to access the function now (not an attribute), but then do our normal () at the end and make it a function call. Think about it like saying "I want to call this function that's a part of my Electron object." It's like an attribute that's a function.
+
+Now normally, these functions actually do relate to the object in question. Seeing as people like to see stuff blown up, let' create a function called annihilate that used Einstein's famous $E = mc^2$ equation to get the energy released when an electron goes full mass 2 energy:
+
+```{python}
+# | id: 7flsMkA1Qqus
+# | outputId: 9257db66-6d7e-493a-9f2e-6966691eaefd
+# define speed of light
+c = 3 * 10**8
+
+
+class Electron:
+
+    def __init__(self, charge=-1, mass=9.10938356e-31):
+        self.charge = charge
+        self.mass = mass
+
+    def annihilate(self):
+        return self.mass * c**2
+
+
+electron = Electron()
+electron.annihilate()
+```
+
+So what's going on with this annihilate method? Just like our print_banana method, we had to pass an argument called self? What does that mean? Self is the object itself...wait what?
+
+Ok, it sounds weird but each method uses a specific argument called self which contains all the interesting information about the class it resides in. With self, you can call the class's attributes or other methods much like you would on instances of our class like we've seen before.
+
+If you wanted to use the electrons mass like we did in annihilate, you'd pass the self variable as an argument, then you could use it by calling mass from the class itself i.e. self.mass. Think about it like trying to keep everything more organized. If you want to do something with an electron object, you're probably likely to use aspects or parts of the electron's attributes. In chem terms, the charge and mass of an electron usually take part in interactions, so if we need to call a function that does stuff with an electron, we're more than likely have to access these attributes. Self helps make this easy.
+
+We could always supply arguments to our methods (just like a normal function), however, wouldn't it be annoying to have to pass the electron mass everytime we called annihilate and we didn't have that self method? Look at the (un)refactor below:
+
+```{python}
+# | id: D_e-oCI0cQ-n
+# | outputId: e909dc71-3767-4d3e-8fed-83f8ee49d040
+c = 3 * 10**8
+
+
+class Electron:
+
+    def __init__(self, charge=-1, mass=9.10938356e-31):
+        self.charge = charge
+        self.mass = mass
+
+    def annihilate(self, mass):
+        return mass * c**2
+
+
+electron = Electron()
+electron.annihilate(electron.mass)
+```
+
+This would make our code really ugly and force use to keep track of which class's attribute we're accessing. Self helps us contain all of this. If we're accessing a method on a specific class, might as well use it's attributes since we're there. In fact, I had to include self in the above example because python explicitly makes you use self as a method argument.
+
+This does lead us though to highlight another good part of methods: just like normal functions we can pass them arguments. Let's try this with annihilate, but allow the variable c, speed of light, to be passed as an arg to the method:
+
+```{python}
+# | id: clWKQVO9eFVI
+# | outputId: 4670f9f9-1f93-48f4-cb36-80b9ae54c9e7
+c = 3 * 10**8
+
+
+class Electron:
+
+    def __init__(self, charge=-1, mass=9.10938356e-31):
+        self.charge = charge
+        self.mass = mass
+
+    def annihilate(self, c):
+        return self.mass * c**2
+
+
+electron = Electron()
+electron.annihilate(c)
+```
+
+Again just like a normal function, we can pass arguments. Note however that we don't see self in the method call for `electron.annihilate(c)`. That's because the arguments we see after self are the only ones you have to pass to the function. Self is already baked in when you create the instance of that class. Everytime you call a method it has access to that self argument without you needing to call it.
+
+Python even errors out if you try to pass self as an arg when you are outside of the method. It will tell you that you passed too many args to that method:
+
+```{python}
+# | id: gv7alDhRgvM8
+# | outputId: 29ef093b-f2f1-4cf2-833b-28058001c014
+electron = Electron()
+electron.annihilate(electron, c)
+```
+
+On top of all of this, self also has access to other methods themselves. To show this, we'll bring back our print banana function and call it from within annihilate:
+
+```{python}
+# | id: pJ8IaV2UjqJk
+# | outputId: ebb8e376-2e7b-4eda-ebce-3fea6271be73
+c = 3 * 10**8
+
+
+class Electron:
+
+    def __init__(self, charge=-1, mass=9.10938356e-31):
+        self.charge = charge
+        self.mass = mass
+
+    def annihilate(self, c):
+        self.print_banana()
+        return self.mass * c**2
+
+    def print_banana(self):
+        print("banana")
+
+
+electron = Electron()
+electron.annihilate(c)
+```
+
+Note even though print banana is defined after annihilate, we can still call annihilate on our instance of Electron. It can then run the method annihilate and even call `print_banana()`. How? Simple. When we do the `electron = Electron()` variable assignment, all our "stuff" for the class Electron gets instantiated. It already knows how `print_banana()` should work. That call to self.`print_banana()` simply looks it up, does what it needs to do, and doesn't cause a fuss.
+
+Nice. Now that we can make classes, assignment them values we can access, and have methods we can use, we can now expand out from our particles and make atoms!
+
+## Expanding to Atoms
+
+Ahhh, the atom. Simple yet complex. So what is an <a href="https://en.wikipedia.org/wiki/Atom">atom</a>? Well it has a nucleus and electron clouds. Seems easy enough. Let's create one. Note we'll also be providing our elementary particle classes which we'll refactor as needed:
+
+```{python}
+# | id: iJDPz-quPs-K
+
+
+class Electron:
+
+    def __init__(self, charge=-1, mass=9.10938356e-31):
+        self.charge = charge
+        self.mass = mass
+
+
+class Proton:
+
+    def __init__(self, charge=1, mass=1.67262158e-27):
+        self.charge = charge
+        self.mass = mass
+
+
+class Neutron:
+
+    def __init__(self, charge=0, mass=1.67492721e-27):
+        self.charge = charge
+        self.mass = mass
+
+
+class Atom:
+
+    def __init__(self, protons, neutrons, electrons):
+        self.protons = protons
+        self.neutrons = neutrons
+        self.electrons = electrons
+
+
+```
+
+Our Atom will start with only three simple instances: protons, neutrons, and electrons. Each will be a list of their repsective class types.
+
+To start, let's make hydrogen:
+
+```{python}
+# | id: gwDPVhoCmXsn
+hydrogen = Atom([Proton()], [], [Electron()])
+```
+
+```{python}
+# | id: pwZ3BywpnC1N
+# | outputId: 775ed526-246a-4084-8f64-ca7adb25f1e2
+len(hydrogen.protons), len(hydrogen.neutrons), len(hydrogen.electrons)
+```
+
+Cool. Now we can create any type of atom we want. For example, we could make Lithium, too.
+
+```{python}
+# | id: KNTB1iHhnVcz
+lithium = Atom([Proton(), Proton(), Proton()], [Neutron(),
+               Neutron(), Neutron()], [Electron(), Electron(), Electron()])
+```
+
+```{python}
+# | id: cdScMKxxdOik
+# | outputId: bb4718f3-507e-448f-ddff-267b2bd03b29
+len(lithium.protons), len(lithium.neutrons), len(lithium.electrons)
+```
+
+There we go. Now this hits upon something you'll see in OOP: <a href="https://en.wikipedia.org/wiki/Object_composition">composition</a>. This only means that a class can be composed of other objects or classes. Here, we're using protons, neutrons, and electrons to make up our atom.
+
+However, this looks ugly as is. We have to manually add our class instances in the Atom declaration. We should just be able to pass a number and then the class takes care of this for us. Let's do that:
+
+```{python}
+# | id: '-VYcdp_qdL82'
+
+
+class Atom:
+
+    def __init__(self, protons: int, neutrons: int, electrons: int):
+        self.protons = [Proton() for _ in range(protons)]
+        self.neutrons = [Neutron() for _ in range(neutrons)]
+        self.electrons = [Electron() for _ in range(electrons)]
+
+
+```
+
+```{python}
+# | id: fAKBe1FNfxtO
+hydrogen = Atom(1, 0, 1)
+```
+
+```{python}
+# | id: jUySQ1Mgf1-y
+# | outputId: b48a8853-a2f4-43cb-bdfb-d50e25d02566
+# same results but easier.
+len(hydrogen.protons), len(hydrogen.neutrons), len(hydrogen.electrons)
+```
+
+Much better. We cut down on what we have to pass to our class instance to start it.
+
+After these last two examples though, you may wonder if and how we can simply make these element variables into classes themselves...didn't you? Well, luckily that moves us right into a fundemential concept in OOP: <a href="https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)">inhertence</a>.
+
+## Inheritence: The Gold of the OOP World
+
+Inheritence is a fundemential concept of OOP. As a tagline, inheritence can be said to be the following: build a base from another class and then build on top of it.
+
+What do we mean by that? Let's start with an example:
+
+We want to be able to make element classes. However, elements share a lot with atoms...like a lot. An element is just a specific arragement of protons, neutrons, and electrons. Really the only thing an element has is a name, but to put a strict definition on an <a href="https://en.wikipedia.org/wiki/Chemical_element">element</a> it's name depends on the number of protons it has.
+
+So to start this journey, we'll write down an element class, inherit from the atom, and then add stuff and explain along the way:
+
+```{python}
+# | id: V5ob9NMhf4sr
+
+
+class Element(Atom):
+
+    def __init__(self, name, protons, neutrons, electrons):
+        super().__init__(protons, neutrons, electrons)
+        self.name = name
+
+
+```
+
+```{python}
+# | id: jHOSKLfO0Kdp
+element = Element("Hydrogen", 1, 0, 1)
+```
+
+```{python}
+# | id: DlFk_64u0NSZ
+# | outputId: 7f1b0777-6e2a-4bf3-98cd-0a3add2b12ab
+element.name, len(element.protons), len(
+    element.neutrons), len(element.electrons)
+```
+
+On its face, Element looks a lot like Atom. The only difference between these two are the name attribute we gave and these two new additions:
+
+`class Element(Atom):`
+
+`super().__init__(protons, neutrons, electrons)`
+
+What is Atom doing in parenthesis there? That tells Element you want to inherit the Atom class. Think of Atom as the parent of Element. Anything that an Atom can do an Element can, too. However, the inverse is not true. Element will and can do more than an Atom.
+
+In most intro OOP texts you'll usually see an example of a Dog and Cat class inheriting from an Animal class. Sometimes classes that inherit others can be seen as a more narrow version of the parent class. Other times though, the inherited class could extend and expand upon the parent class, but all the class that inherit from it share a common feature or kind of data.
+
+The main takeaway is that by inheriting Atom, we get all of it's funtionality and attirbutes.
+
+Which brings us to this line: `super().__init__(protons, neutrons, electrons)`
+
+What's going on there? To put it briefly, this whole super init thing is the same as doing `Atom(protons, neutrons, electrons)`. Since we know Element inherits all of Atom's attributes, we want a single line that declares and set those all at once. We don't want to have to repeat our self.blahblah = blah stuff. That's the point of why we inherited from Atom. We can take it's attributes, quickly assign them, and move on.
+
+## Extending our World With Methods
+
+Next up, we'll spice up our element class with a few tricks. Just having an elemnet static with no change in electrons is boring and not really chemistry. Let's first find a way to <a href="https://en.wikipedia.org/wiki/Ionization">ionize</a> our electrons and change their charge. To do so, we'll have to be able to remove electrons from our element and in doing so change the charge. This means we need a way do stuff to our class.
+
+```{python}
+# | id: EM_wdUBpOFpE
+# mapping to get name from proton count
+atomic_number2name = {
+    1: "Hydrogen",
+    2: "Helium",
+    3: "Lithium",
+    4: "Beryllium",
+    5: "Boron",
+    6: "Carbon",
+    7: "Nitrogen",
+    8: "Oxygen",
+    9: "Fluorine",
+    10: "Neon",
+    11: "Sodium",
+    12: "Magnesium",
+    13: "Aluminium",
+    14: "Silicon",
+    15: "Phosphorus",
+    16: "Sulphur",
+    17: "Chlorine",
+    18: "Argon",
+    19: "Potassium",
+    20: "Calcium",
+    21: "Scandium",
+    22: "Titanium",
+    23: "Vanadium",
+    24: "Chromium",
+    25: "Manganese",
+    26: "Iron",
+    27: "Cobalt",
+    28: "Nickel",
+    29: "Copper",
+    30: "Zinc",
+    31: "Gallium",
+    32: "Germanium",
+    33: "Arsenic",
+    34: "Selenium",
+    35: "Bromine",
+    36: "Krypton",
+    37: "Rubidium",
+    38: "Strontium",
+    39: "Yttrium",
+    40: "Zirconium",
+    41: "Niobium",
+    42: "Molybdenum",
+    43: "Technetium",
+    44: "Ruthenium",
+    45: "Rhodium",
+    46: "Palladium",
+    47: "Silver",
+    48: "Cadmium",
+    49: "Indium",
+    50: "Tin",
+    51: "Antimony",
+    52: "Tellurium",
+    53: "Iodine",
+    54: "Xenon",
+    55: "Caesium",
+    56: "Barium",
+    57: "Lanthanum",
+    58: "Cerium",
+    59: "Praseodymium",
+    60: "Neodymium",
+    61: "Promethium",
+    62: "Samarium",
+    63: "Europium",
+    64: "Gadolinium",
+    65: "Terbium",
+    66: "Dysprosium",
+    67: "Holmium",
+    68: "Erbium",
+    69: "Thuliumm",
+    70: "Ytterbium",
+    71: "Lutetium",
+    72: "Hafnium",
+    73: "Tantalum",
+    74: "Tungsten",
+    75: "Rhenium",
+    76: "Osmium",
+    77: "Iridium",
+    78: "Platinum",
+    79: "Gold",
+    80: "Mercury",
+    81: "Thallium",
+    82: "Lead",
+    83: "Bismuth",
+    84: "Polonium",
+    85: "Astatine",
+    86: "Radon"
+}
+```
+
+```{python}
+# | id: EdTcbGsx7AHz
+
+
+class Element(Atom):
+
+    def __init__(self, protons, neutrons, electrons):
+
+        # add assertions to make sure we're not making invalid elements
+        if electrons < 0:
+            raise ValueError("Electrons must be greater than 0")
+        if protons < 0:
+            raise ValueError("Protons must be greater than 0")
+        if neutrons < 0:
+            raise ValueError("Protons must be greater than 0")
+
+        super().__init__(protons, neutrons, electrons)
+        self.name = atomic_number2name[protons]
+        self.charge = protons - electrons
+
+    def ionize_remove(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for electron in range(change):
+            self.electrons.pop()
+
+    def ionize_add(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be less than zero")
+
+        for electron in range(change):
+            self.electrons.append(Electron())
+
+
+```
+
+```{python}
+# | id: a29TLene7AJ5
+my_element = Element(12, 14, 10)
+```
+
+```{python}
+# | id: s3uikXET7AL_
+# | outputId: 31da3ee1-3429-4058-d2b7-70d8bee77254
+# our mapping works!
+my_element.name
+```
+
+```{python}
+# | id: AGN5xp4D7AOU
+# | outputId: 43cb60c9-90fd-425f-bd5f-d83b1fc8d5fa
+len(my_element.electrons)
+```
+
+```{python}
+# | id: CsGhhJc87AQx
+# | outputId: d4dd38be-cc91-4633-ff5c-a2dbfdb75214
+my_element.ionize_remove(3)
+len(my_element.electrons)
+```
+
+```{python}
+# | id: y56bSRouZV8D
+# | outputId: 5d82ca4d-45a2-4ed8-960e-398b8824c67e
+my_element.ionize_add(10)
+len(my_element.electrons)
+```
+
+Alright. We're on our way towards some good stuff here. We can create our element, ionize it (i.e. remove or add electrons), and we know what it's called.
+
+One thing I have been noticing throughout this though is the annoyance of having to call our len function everytime we want to see the number of electrons, protons, or neutrons. Wouldn't a quick method be good to just grab these? Or what about another attribute we call num_electrons and just calculate the number of electrons based on our list len? Both of these strategies are valid, however, making a new attribute requires adding to our ionization code, while creating a new method adds to our methods, but no changes to our current functions.
+
+These are tradeoffs you'll have to decide on while writing code all the time with OOP and in general. Sometimes there is a strict right or wrong answer. Other times, not so much.
+
+Since I'm dictator of this post, let's implement it my way:
+
+```{python}
+# | id: u5eskzBC_XNO
+
+
+class Element(Atom):
+
+    def __init__(self, protons, neutrons, electrons):
+
+        # add assertions to make sure we're not making invalid elements
+        if electrons < 0:
+            raise ValueError("Electrons must be greater than 0")
+        if protons < 0:
+            raise ValueError("Protons must be greater than 0")
+        if neutrons < 0:
+            raise ValueError("Protons must be greater than 0")
+
+        super().__init__(protons, neutrons, electrons)
+        self.name = atomic_number2name[protons]
+        self.charge = protons - electrons
+
+    def electron_count(self):
+        return len(self.electrons)
+
+    def proton_count(self):
+        return len(self.protons)
+
+    def neutron_count(self):
+        return len(self.neutrons)
+
+    def ionize_remove(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for electron in range(change):
+            self.electrons.pop()
+
+    def ionize_add(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be less than zero")
+
+        for electron in range(change):
+            self.electrons.append(Electron())
+
+
+```
+
+```{python}
+# | id: wQRjGPcJ_7tU
+my_element = Element(12, 14, 10)
+```
+
+```{python}
+# | id: 9CzBMzLh_9Xp
+# | outputId: d7452126-a2dc-4df1-f0c8-0da28e89d86a
+# it works!
+print(my_element.electron_count())
+my_element.ionize_remove(3)
+print(my_element.electron_count())
+my_element.ionize_add(10)
+print(my_element.electron_count())
+```
+
+Great! Now we have a way to access our attirbutes without using the an external function like len. If you haven't been working with python or come from another programming language, this accessing of attributes i.e. using methods to get attributes might seem normal. In other languages like Java, you can have private attributes. These cannot be accessed like we can in python with the . operator. They're private so they cannot be changed unless we create a specific method to do so.
+
+But this is python. No private stuff here.
+
+Let's continue our refactor. Next, we'll add a few new features:
+
+- Restricting anyone from removing more electrons than an Element has
+- Create a method to remove protons and neutrons
+- Keep the atomic number as an attribute and use that to map to name.
+
+```{python}
+# | id: 03AI1If4KM0G
+
+
+class Element(Atom):
+
+    def __init__(self, protons, neutrons, electrons):
+
+        # add assertions to make sure we're not making invalid elements
+        if electrons < 0:
+            raise ValueError("Electrons must be greater than 0")
+        if protons < 0:
+            raise ValueError("Protons must be greater than 0")
+        if neutrons < 0:
+            raise ValueError("Protons must be greater than 0")
+
+        super().__init__(protons, neutrons, electrons)
+        self.charge = protons - electrons
+        self.atomic_number = self.proton_count()
+
+    def electron_count(self):
+        return len(self.electrons)
+
+    def proton_count(self):
+        return len(self.protons)
+
+    def neutron_count(self):
+        return len(self.neutrons)
+
+    def get_atomic_number(self):
+        return self.atomic_number
+
+    def get_name(self):
+        return atomic_number2name[self.atomic_number]
+
+    def ionize_remove(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for electron in range(change):
+            self.electrons.pop()
+
+    def ionize_add(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be less than zero")
+
+        for electron in range(change):
+            self.electrons.append(Electron())
+
+    def remove_proton(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+        if self.proton_count() <= change:
+            raise ValueError("Change must be greater than protons")
+
+        for proton in range(change):
+            self.protons.pop()
+            self.atomic_number -= 1
+
+    def add_proton(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for proton in range(change):
+            self.protons.append(Proton())
+            self.atomic_number += 1
+
+
+```
+
+```{python}
+# | id: hCljlP1tL2yJ
+my_element = Element(23, 23, 24)
+```
+
+```{python}
+# | id: HfkVEMQVL7HW
+# | outputId: 0ef0bd04-c344-4a1c-e797-4424d4c280f4
+my_element.get_name(), my_element.get_atomic_number()
+```
+
+```{python}
+# | id: e3Lq363FMGFZ
+# | outputId: 083e0268-b86a-4d60-d1cf-50306c3d4c92
+my_element.remove_proton(2)
+my_element.get_name(), my_element.get_atomic_number()
+```
+
+We can do alchemy now. Create an element and change it at will. We can even turn iron to gold:
+
+```{python}
+# | id: 4uba8F5AMPAB
+# | outputId: f8f62340-74ef-49d2-83c8-e660f5f3a793
+material = Element(82, 82, 82)
+print("Start:", material.get_name())
+
+material.remove_proton(3)
+print("End:", material.get_name())
+```
+
+Abit ionized Gold (remember that means there are a different number of electrons than protons), but Gold still.
+
+Another refactor we can do is something we've been dealing with this whole time that seems annoying: having to enter the same number if elements are "normal" i.e. same number of protons, electrons, and neutrons.
+
+Wouldn't it be nice to do `Element(82)` to make lead instead of `Element(82, 82, 82)`. Other programming languages use <a href="https://en.wikipedia.org/wiki/Function_overloading">overloading</a>. This means you can create a class instance in many ways. Say you want your class user to be able to create a class instace with a str or int. What do you do? Or in our case, we want people to be able to create an element with 1 or 3 args? Python may not be as elegant, but you can do it:
+
+```{python}
+# | id: I3_2B1e3uHjJ
+
+
+class Element(Atom):
+
+    def __init__(self, *args):
+
+        if len(args) == 1:
+            protons, neutrons, electrons = [args[0]] * 3
+        elif len(args) == 3:
+            protons, neutrons, electrons = args
+        else:
+            raise ValueError("Invalid number of arguments.")
+
+        # add assertions to make sure we're not making invalid elements
+        if electrons < 0:
+            raise ValueError("Electrons must be greater than 0")
+        if protons < 0:
+            raise ValueError("Protons must be greater than 0")
+        if neutrons < 0:
+            raise ValueError("Protons must be greater than 0")
+
+        super().__init__(protons, neutrons, electrons)
+        self.charge = protons - electrons
+        self.atomic_number = self.proton_count()
+
+    def electron_count(self):
+        return len(self.electrons)
+
+    def proton_count(self):
+        return len(self.protons)
+
+    def neutron_count(self):
+        return len(self.neutrons)
+
+    def get_atomic_number(self):
+        return self.atomic_number
+
+    def get_name(self):
+        return atomic_number2name[self.atomic_number]
+
+    def ionize_remove(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for electron in range(change):
+            self.electrons.pop()
+
+    def ionize_add(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be less than zero")
+
+        for electron in range(change):
+            self.electrons.append(Electron())
+
+    def remove_proton(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+        if self.proton_count() <= change:
+            raise ValueError("Change must be greater than protons")
+
+        for proton in range(change):
+            self.protons.pop()
+            self.atomic_number -= 1
+
+    def add_proton(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for proton in range(change):
+            self.protons.append(Proton())
+            self.atomic_number += 1
+
+
+```
+
+```{python}
+# | id: xmvtBTmLzHaG
+# | outputId: 480ac2ed-9c88-4151-e305-24ca34cafed5
+material = Element(82)
+print("Start:", material.get_name())
+
+material.remove_proton(3)
+print("End:", material.get_name())
+```
+
+Looks like it works. Our only changes where here:
+
+```
+def __init__(self, *args):
+
+    if len(args) == 1:
+      protons, neutrons, electrons = [args[0]] * 3
+    elif len(args) == 3:
+      protons, neutrons, electrons = args
+    else:
+      raise ValueError("Invalid")
+```
+
+`*args`, if you haven't used it, let's us define an arbitrary amount of arguments in our class instance. We could pass as many or as little as we want, and our `__init__` function interprets them as a tuple. Simple, plain, old tuple. See:
+
+```{python}
+# | id: RnEs8Fv5zJb8
+# | outputId: c56bbdbd-678c-42c1-ed46-8bdf911d8fb5
+
+
+def func(*args):
+    print(type(args))
+
+
+func(1, 5, 2, 5, 2, 5, 54)
+```
+
+We definitely don't want args to be mutable or change so we have them as a tuple. Makes sense. However, to the main point. Our change to ```__init__``` allows us to sent 1 or 3 args but no more and no less. Anything else and we get a value error:
+
+```{python}
+# | id: FThi2OMtz7jE
+# | outputId: 0ee95a62-4ad4-4f19-f0c8-a8f5cce338d9
+Element(82, 82)
+```
+
+```{python}
+# | id: _P5LQSU61dlJ
+# | outputId: 09b5c51f-5003-4a65-8da5-caa589d55f62
+Element()
+```
+
+```{python}
+# | id: EcxNLRFq1egw
+# | outputId: 96f3803c-de77-4816-f028-f88eeeaf84f8
+Element(82, 82, 82, 83)
+```
+
+Notice though that we don't have an error around the class taking arguments, but rather, an error about the number of arguments we passed.
+
+We could do the same thing with our methods, however, we don't have a real use case that I can see yet.
+
+Alright. We have some basic chemistry going on. We can have elements and do stuff. Let's do a few operations on what we've done and call it a day for now. (Maybe have this be a part one of a series to make this ever expanding?).
+
+However, I wanted to do one last refactor. I want to move all the stuff we did in Element to Atom. Why? Because ionization and proton removal can be tasks of both the Element or Atom class. Why put them in Atom? Could be a design choice, however, I say that if an Atom can do it, why not leave it there and simplify our Element class in case we want to add to it. On top of this, we'll add an add or remove neutron method to Atom as well. This created an <a href="https://en.wikipedia.org/wiki/Isotope">isotope</a>:
+
+```{python}
+# | id: ThYlIb1A_a9V
+
+
+class Atom:
+
+    def __init__(self, protons: int, neutrons: int, electrons: int):
+        self.protons = [Proton() for _ in range(protons)]
+        self.neutrons = [Neutron() for _ in range(neutrons)]
+        self.electrons = [Electron() for _ in range(electrons)]
+
+    def electron_count(self):
+        return len(self.electrons)
+
+    def proton_count(self):
+        return len(self.protons)
+
+    def neutron_count(self):
+        return len(self.neutrons)
+
+    def get_charge(self):
+        return self.proton_count() - self.electron_count()
+
+    def get_mass(self):
+        return sum([proton.mass + electron.mass + neutron.mass
+                    for proton, electron, neutron
+                    in zip(self.protons, self.electrons, self.neutrons)])
+
+    def ionize_remove(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for electron in range(change):
+            self.electrons.pop()
+
+    def ionize_add(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be less than zero")
+
+        for electron in range(change):
+            self.electrons.append(Electron())
+
+    def remove_proton(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+        if self.proton_count() <= change:
+            raise ValueError("Change must be greater than protons")
+
+        for proton in range(change):
+            self.protons.pop()
+            self.atomic_number -= 1
+
+    def add_proton(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for proton in range(change):
+            self.protons.append(Proton())
+            self.atomic_number += 1
+
+    def add_neutron(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for neutron in range(change):
+            self.neutrons.append(Neutron())
+
+    def remove_neutron(self, change):
+
+        if not isinstance(change, int):
+            raise ValueError("Change must be an integer")
+        if change < 1:
+            raise ValueError("Change must be greater than zero")
+
+        for neutron in range(change):
+            self.neutrons.pop()
+```
+
+```{python}
+# | id: f7G2_KL21f-7
+
+
+class Element(Atom):
+
+    def __init__(self, *args):
+
+        if len(args) == 1:
+            protons, neutrons, electrons = [args[0]] * 3
+        elif len(args) == 3:
+            protons, neutrons, electrons = args
+        else:
+            raise ValueError("Invalid number of arguments.")
+
+        # add assertions to make sure we're not making invalid elements
+        if electrons < 0:
+            raise ValueError("Electrons must be greater than 0")
+        if protons < 0:
+            raise ValueError("Protons must be greater than 0")
+        if neutrons < 0:
+            raise ValueError("Protons must be greater than 0")
+
+        super().__init__(protons, neutrons, electrons)
+        self.charge = protons - electrons
+        self.atomic_number = self.proton_count()
+
+    def get_atomic_number(self):
+        return self.atomic_number
+
+    def get_name(self):
+        return atomic_number2name[self.atomic_number]
+
+
+```
+
+```{python}
+# | id: FVe95swX_u1g
+# | outputId: a84fc8f9-c466-4f6d-d7f2-9fc64d9a9213
+material = Element(79)
+print(material.get_mass())
+print(material.get_charge())
+
+material.ionize_remove(3)
+print(material.get_mass())
+print(material.get_charge())
+print(material.get_name())
+
+material.remove_proton(5)
+print(material.get_mass())
+print(material.get_charge())
+print(material.get_name())
+```
+
+And there you have it. We have some basics for OOP using chemistry concepts. We can create and alter matter at will. We can turn lead into gold, create ions or isotopes, and generally control space and time....well maybe not that far.
+
+In future posts, I might build this out but hopefully this helps someone, somewhere just a bit.
+
+Feedback always welcome.
+
