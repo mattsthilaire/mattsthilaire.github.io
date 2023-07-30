@@ -1,5 +1,6 @@
 ---
 title: Better OOP Learning Through Chemistry
+image: atom.svg
 execute: 
   error: true
 author: Matt St. Hilaire
