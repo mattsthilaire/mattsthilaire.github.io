@@ -1,19 +1,19 @@
 ---
 title: "About"
-image: profile.jpg
+image: profile.png
 about:
   template: jolla
   links:
     - icon: twitter
       text: Twitter
-      href: https://twitter.com
+      href: https://twitter.com/hilaire_matthew
     - icon: linkedin
       text: LinkedIn
-      href: https://linkedin.com
+      href: https://www.linkedin.com/in/matt-st-hilaire-971663160/
     - icon: github
       text: Github
-      href: https://github.com
+      href: https://github.com/mattsthilaire
 
 ---
 
-About this blog
+Hello there! Thanks for stopping by. This is my site about data, science, or whatever. I'm a data scientist with a concentration on NLP. Background in physics. I barely use social media, but you can occasionally find me solving math puzzles on twitter or here or Linkedin.
